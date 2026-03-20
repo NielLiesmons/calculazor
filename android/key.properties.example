@@ -1,0 +1,5 @@
+# Copy to key.properties and fill in your passwords. Never commit key.properties.
+storePassword=telehond
+keyPassword=telehond
+keyAlias=upload
+storeFile=upload-keystore.jks
