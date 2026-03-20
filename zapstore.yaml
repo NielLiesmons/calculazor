@@ -9,7 +9,7 @@ description: |
   with expression support and a Right Triangle solver: tap a parameter, enter a value
   in the modal, hit Solve to fill the rest.
 
-repository: https://github.com/YOUR_USERNAME/calculazor
+repository: https://github.com/NielLiesmons/calculazor
 
 # Build release APK first: flutter build apk --release
 release_source: ./build/app/outputs/flutter-apk/app-release.apk
