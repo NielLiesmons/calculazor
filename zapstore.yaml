@@ -1,0 +1,29 @@
+# Zapstore (zsp) config: https://github.com/zapstore/zsp
+# Publish from calculazor dir: SIGN_WITH=nsec1... zsp publish
+# First-time: zsp publish --wizard
+
+name: Calculazor
+summary: A sexy calculator that doesn't just forget everything.
+description: |
+  Calculazor keeps your results and history so you can reuse them. Basic calculator
+  with expression support and a Right Triangle solver: tap a parameter, enter a value
+  in the modal, hit Solve to fill the rest.
+
+repository: https://github.com/YOUR_USERNAME/calculazor
+
+# Build release APK first: flutter build apk --release
+release_source: ./build/app/outputs/flutter-apk/app-release.apk
+
+# App icon for store listing (same as launcher icon source)
+icon: ./assets/images/logo.png
+
+tags:
+  - calculator
+  - geometry
+  - tools
+
+license: MIT
+
+# Optional: uncomment and set if you have a repo
+# metadata_sources:
+#   - github
