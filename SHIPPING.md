@@ -45,11 +45,11 @@ Output: `build/app/outputs/flutter-apk/app-release.apk`
 
 - Install zsp: `go install github.com/zapstore/zsp@latest`
 - In **`zapstore.yaml`** set `repository` to your real repo URL (e.g. `https://github.com/YourUsername/calculazor`).
-- Sign and publish (see [zsp](https://github.com/zapstore/zsp)):
+- Sign and publish (see [zsp](https://github.com/zapstore/zsp)). From **calculazor** (so `release_source` in zapstore.yaml resolves), set `SIGN_WITH` in your environment, then:
   ```bash
   cd calculazor
-  SIGN_WITH=nsec1... zsp publish
+  zsp publish
   ```
-  Or first-time: `zsp publish --wizard`
+  Or first-time: `zsp publish --wizard`.
 - When zsp asks for the keystore path, use: **`android/upload-keystore.jks`** (relative to calculazor) or the full path. That links your Nostr identity to your app’s signing key so Zapstore can show verified ownership.
 - Optional: add `images:` (screenshots) in `zapstore.yaml` for the store listing.

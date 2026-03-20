@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zaplab_design/zaplab_design.dart';
 import 'package:tap_builder/tap_builder.dart';
@@ -207,6 +208,7 @@ class _ParamField extends StatelessWidget {
       placeholder: '0',
       title: label,
       singleLine: true,
+      keyboardType: TextInputType.numberWithOptions(decimal: true),
       onDone: (_) {},
     );
   }

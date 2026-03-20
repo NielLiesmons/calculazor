@@ -74,11 +74,12 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.3
 
-# App icon: place your source image at assets/images/logo.png then run:
-#   dart run flutter_launcher_icons
+# App icon: logo-dark.png has transparent bg; run: dart run flutter_launcher_icons
 flutter_launcher_icons:
   android: true
-  image_path: "assets/images/logo.png"
+  image_path: "assets/images/logo-dark.png"
+  adaptive_icon_background: "#222222"
+  adaptive_icon_foreground: "assets/images/logo-dark.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
