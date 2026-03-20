@@ -4,10 +4,7 @@
 
 name: Calculazor
 summary: A sexy calculator that doesn't just forget everything.
-description: |
-  Calculazor keeps your results and history so you can reuse them. Basic calculator
-  with expression support and a Right Triangle solver: tap a parameter, enter a value
-  in the modal, hit Solve to fill the rest.
+description: A sexy calculator that doesn't just forget everything.
 
 repository: https://github.com/NielLiesmons/calculazor
 
