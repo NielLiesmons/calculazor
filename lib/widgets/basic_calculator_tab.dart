@@ -7,8 +7,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
+/// Converts UI symbols to what [ShuntingYardParser] accepts (e.g. ² → ^2, √ → sqrt).
+String _expressionToParserString(String display) {
+  return display
+      .replaceAll('×', '*')
+      .replaceAll('÷', '/')
+      .replaceAll('²', '^2')
+      .replaceAll('³', '^3')
+      .replaceAll('√', 'sqrt')
+      .replaceAll('π', '${math.pi}')
+      .replaceAll('φ', '${(1 + math.sqrt(5)) / 2}')
+      .replaceAll('e', '${math.e}');
+}
+
 class BasicCalculatorTab extends HookConsumerWidget {
   const BasicCalculatorTab({super.key});
+
+  /// Shown on eval failure; cleared in one action (any digit/op or full ⌫).
+  static const String kErrorDisplay = 'Error';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -93,6 +109,9 @@ class BasicCalculatorTab extends HookConsumerWidget {
     }, []);
 
     void addToExpression(String value) {
+      if (expression.value == kErrorDisplay) {
+        expression.value = '';
+      }
       expression.value += value;
     }
 
@@ -102,6 +121,10 @@ class BasicCalculatorTab extends HookConsumerWidget {
     }
 
     void deleteLast() {
+      if (expression.value == kErrorDisplay) {
+        expression.value = '';
+        return;
+      }
       if (expression.value.isNotEmpty) {
         expression.value = expression.value.substring(
           0,
@@ -117,15 +140,11 @@ class BasicCalculatorTab extends HookConsumerWidget {
 
     void calculate() {
       try {
-        if (expression.value.isEmpty) return;
+        if (expression.value.isEmpty || expression.value == kErrorDisplay) {
+          return;
+        }
 
-        // Replace display symbols with math symbols
-        String mathExpression = expression.value
-            .replaceAll('×', '*')
-            .replaceAll('÷', '/')
-            .replaceAll('π', '${math.pi}')
-            .replaceAll('φ', '${(1 + math.sqrt(5)) / 2}') // Golden ratio
-            .replaceAll('e', '${math.e}');
+        final mathExpression = _expressionToParserString(expression.value);
 
         final parser = ShuntingYardParser();
         final exp = parser.parse(mathExpression);
@@ -156,13 +175,16 @@ class BasicCalculatorTab extends HookConsumerWidget {
           result.value = ''; // Clear result since it's now in expression
         }
       } catch (e) {
-        expression.value = 'Error';
+        expression.value = kErrorDisplay;
         result.value = '';
       }
     }
 
     void useRecentResult(double value) {
-      expression.value += _formatNumber(value); // APPEND to current expression
+      if (expression.value == kErrorDisplay) {
+        expression.value = '';
+      }
+      expression.value += _formatNumber(value);
     }
 
     return LabScaffold(
@@ -281,24 +303,34 @@ class BasicCalculatorTab extends HookConsumerWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          LabText.h1(
-                                            result.value.isNotEmpty
-                                                ? _formatNumberForDisplay(
-                                                    result.value,
-                                                    maxDecimals: 8,
-                                                  )
-                                                : expression.value.isEmpty
-                                                    ? '0'
-                                                    : _formatNumberForDisplay(
-                                                        expression.value,
-                                                        maxDecimals: 8,
-                                                      ),
-                                            color: LabTheme.of(
+                                          if (result.value.isEmpty &&
+                                              expression.value ==
+                                                  kErrorDisplay)
+                                            BasicCalculatorTab._buildErrorDisplay(
                                               context,
-                                            ).colors.white,
-                                            textOverflow: TextOverflow.ellipsis,
-                                          ),
-                                          if (result.value.isEmpty) ...[
+                                            )
+                                          else
+                                            LabText.h1(
+                                              result.value.isNotEmpty
+                                                  ? _formatNumberForDisplay(
+                                                      result.value,
+                                                      maxDecimals: 8,
+                                                    )
+                                                  : expression.value.isEmpty
+                                                      ? '0'
+                                                      : _formatNumberForDisplay(
+                                                          expression.value,
+                                                          maxDecimals: 8,
+                                                        ),
+                                              color: LabTheme.of(
+                                                context,
+                                              ).colors.white,
+                                              textOverflow:
+                                                  TextOverflow.ellipsis,
+                                            ),
+                                          if (result.value.isEmpty &&
+                                              expression.value !=
+                                                  kErrorDisplay) ...[
                                             const LabGap.s4(),
                                             _buildCursor(
                                               LabTheme.of(context),
@@ -722,6 +754,26 @@ class BasicCalculatorTab extends HookConsumerWidget {
           ),
         );
       },
+    );
+  }
+
+  static Widget _buildErrorDisplay(BuildContext context) {
+    return ShaderMask(
+      blendMode: BlendMode.srcIn,
+      shaderCallback: (bounds) => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: const [
+          Color(0xFFFFABAB),
+          Color(0xFFFF5555),
+          Color(0xFFCB2D3E),
+        ],
+      ).createShader(bounds),
+      child: LabText.h1(
+        kErrorDisplay,
+        color: const Color(0xFFFFFFFF),
+        textOverflow: TextOverflow.ellipsis,
+      ),
     );
   }
 

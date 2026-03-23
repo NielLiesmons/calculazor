@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zaplab_design/zaplab_design.dart';
 import 'package:tap_builder/tap_builder.dart';
@@ -30,10 +29,6 @@ class GeometryCalculatorTab extends HookConsumerWidget {
                 decoration: BoxDecoration(
                   color: theme.colors.white8,
                   borderRadius: theme.radius.asBorderRadius().rad12,
-                  border: Border.all(
-                    color: theme.colors.white33,
-                    width: LabLineThicknessData.normal().thin,
-                  ),
                 ),
                 child: Row(
                   children: [
@@ -225,7 +220,7 @@ class _ParamField extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: theme.colors.black33,
-            borderRadius: theme.radius.asBorderRadius().rad8,
+            borderRadius: theme.radius.asBorderRadius().rad16,
             border: Border.all(
               color: theme.colors.white33,
               width: LabLineThicknessData.normal().thin,
